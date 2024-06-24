@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 function Table() {
   const [collabs, setCollabs] = useState([]);
   const [filteredCollabs, setFilteredCollabs] = useState([]);
-  const [selectedBranches, setSelectedBranches] = useState(["All", "All"]);
-  const [selectedYear, setSelectedYear] = useState("All");
-  const [selectedNature, setSelectedNature] = useState("All");
+  const [selectedBranches, setSelectedBranches] = useState(["all", "all"]);
+  const [selectedYear, setSelectedYear] = useState("all");
+  const [selectedNature, setSelectedNature] = useState("all");
   const [natures, setNatures] = useState([]);
 
   useEffect(() => {
@@ -26,30 +26,29 @@ function Table() {
   useEffect(() => {
     let filtered = collabs;
 
-    if (selectedBranches[0] !== "All" || selectedBranches[1] !== "All") {
-      if (selectedBranches[0] !== "All" && selectedBranches[1] !== "All") {
+    if (selectedBranches[0] !== "all" || selectedBranches[1] !== "all") {
+      if (selectedBranches[0] !== "all" && selectedBranches[1] !== "all") {
         filtered = filtered.filter((collab) => {
           return selectedBranches.every((branch) =>
             collab.branch.toLowerCase().includes(branch.toLowerCase())
           );
         });
       } else {
-        const branch = selectedBranches.find((branch) => branch !== "All");
+        const branch = selectedBranches.find((branch) => branch !== "all");
         filtered = filtered.filter((collab) =>
           collab.branch.toLowerCase().includes(branch.toLowerCase())
         );
       }
     }
 
-    if (selectedYear !== "All") {
+    if (selectedYear !== "all") {
       filtered = filtered.filter((collab) => {
         const startYear = new Date(collab.start_date).getFullYear();
-        const endYear = new Date(collab.end_date).getFullYear();
-        return startYear <= selectedYear && endYear >= selectedYear;
+        return startYear == selectedYear;
       });
     }
 
-    if (selectedNature !== "All") {
+    if (selectedNature !== "all") {
       filtered = filtered.filter(
         (collab) => collab.nature.toLowerCase() === selectedNature.toLowerCase()
       );
@@ -60,16 +59,16 @@ function Table() {
 
   const handleBranchChange = (event, index) => {
     const newSelectedBranches = [...selectedBranches];
-    newSelectedBranches[index] = event.target.value;
+    newSelectedBranches[index] = event.target.value.toLowerCase();
     setSelectedBranches(newSelectedBranches);
   };
 
   const handleYearChange = (event) => {
-    setSelectedYear(event.target.value);
+    setSelectedYear(event.target.value.toLowerCase());
   };
 
   const handleNatureChange = (event) => {
-    setSelectedNature(event.target.value);
+    setSelectedNature(event.target.value.toLowerCase());
   };
 
   // Function to format the duration between start and end dates
@@ -83,23 +82,14 @@ function Table() {
 
   // Get unique years from collabs data for the year filter dropdown
   const getUniqueYears = () => {
-    let years = collabs.flatMap((collab) => [
-      new Date(collab.start_date).getFullYear(),
-      new Date(collab.end_date).getFullYear(),
-    ]);
+    let years = collabs.map((collab) => new Date(collab.start_date).getFullYear());
     years = Array.from(new Set(years)).sort();
-    const minYr = parseInt(years[0]);
-    let maxYr = parseInt(years[years.length - 1]);
-    let yr = [];
-    for (let i = minYr; i <= maxYr; i++) {
-      yr.push(i);
-    }
-    return yr;
+    return years;
   };
 
   // Get unique natures from collabs data for the nature filter dropdown
   const getUniqueNatures = (collabs) => {
-    const natures = collabs.map((collab) => collab.nature);
+    const natures = collabs.map((collab) => collab.nature.toLowerCase());
     return Array.from(new Set(natures));
   };
 
@@ -121,7 +111,7 @@ function Table() {
           onChange={handleNatureChange}
           className="border border-gray-300 rounded px-3 py-2"
         >
-          <option value="All">All</option>
+          <option value="all">All</option>
           {natures.map((nature) => (
             <option key={nature} value={nature}>
               {nature}
@@ -140,7 +130,7 @@ function Table() {
           onChange={(e) => handleBranchChange(e, 0)}
           className="border border-gray-300 rounded px-3 py-2"
         >
-          <option value="All">All</option>
+          <option value="all">All</option>
           <option value="csbs">CSBS</option>
           <option value="cse">CSE</option>
           <option value="aiml">AIML</option>
@@ -159,7 +149,7 @@ function Table() {
           onChange={(e) => handleBranchChange(e, 1)}
           className="border border-gray-300 rounded px-3 py-2"
         >
-          <option value="All">All</option>
+          <option value="all">All</option>
           <option value="csbs">CSBS</option>
           <option value="cse">CSE</option>
           <option value="aiml">AIML</option>
@@ -178,7 +168,7 @@ function Table() {
           onChange={handleYearChange}
           className="border border-gray-300 rounded px-3 py-2"
         >
-          <option value="All">All</option>
+          <option value="all">All</option>
           {getUniqueYears().map((year) => (
             <option key={year} value={year}>
               {year}
