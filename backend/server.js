@@ -32,6 +32,21 @@ app.get('/api/collab', (req, res) => {
     });
 });
 
+// Define a route to post new collab
+app.post('/api/collabs', (req, res) => {
+  const { collab_id,title, name_of_collab, participants, start_date, end_date, nature, link, branch, created_date } = req.body;
+  console.log(req.body);
+  const query = 'INSERT INTO collab (collab_id,title, name_of_collab, participants, start_date, end_date, nature, link, branch, created_date) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?)';
+  console.log(query);
+  pool.query(query, [collab_id,title, name_of_collab, participants, start_date, end_date, nature, link, branch, created_date], (err, results) => {
+    console.log(err);
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.status(201).json({ message: 'Collaboration added successfully!', collabId: results.insertId });
+  });
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);

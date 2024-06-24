@@ -211,6 +211,9 @@ function Table() {
               <th className="py-3 px-4 border-b-2 border-gray-600">
                 Link to the relevant document
               </th>
+              <th className="py-3 px-4 border-b-2 border-gray-600">
+                Branches
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -235,6 +238,7 @@ function Table() {
                     Project Link
                   </a>
                 </td>
+                <td className="py-3 px-4">{collab.branch}</td>
               </tr>
             ))}
           </tbody>
