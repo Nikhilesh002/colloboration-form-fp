@@ -9,6 +9,10 @@ const port = 3001; // Choose a port for your backend server
 app.use(cors()); // To allow requests from your frontend
 app.use(express.json());
 
+const path = require('path');
+// deploy react build in this server
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
 // Create a pool connection
 const pool = createPool({
     host: "localhost",
@@ -26,6 +30,11 @@ app.get('/api/collabs', (req, res) => {
         }
         res.json(results);
     });
+});
+
+// Catch-all route to handle client-side routing
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 // Start the server
