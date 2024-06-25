@@ -71,7 +71,7 @@ function Table() {
     setSelectedNature(event.target.value.toLowerCase());
   };
 
-  // Function to format the duration between start and end dates
+  // do duration
   const formatDuration = (start, end) => {
     const startYear = new Date(start).getFullYear();
     const endYear = new Date(end).getFullYear();
@@ -80,14 +80,14 @@ function Table() {
     return eY - sY;
   };
 
-  // Get unique years from collabs data for the year filter dropdown
+  // unique years
   const getUniqueYears = () => {
     let years = collabs.map((collab) => new Date(collab.start_date).getFullYear());
     years = Array.from(new Set(years)).sort();
     return years;
   };
 
-  // Get unique natures from collabs data for the nature filter dropdown
+  // unique natures
   const getUniqueNatures = (collabs) => {
     const natures = collabs.map((collab) => collab.nature.toLowerCase());
     return Array.from(new Set(natures));
@@ -222,10 +222,11 @@ function Table() {
                 <td className="py-3 px-4">{collab.nature}</td>
                 <td className="py-3 px-4">
                   <a
+                    target="__blank"
                     href={collab.link}
                     className="text-blue-500 hover:underline"
                   >
-                    Project Link
+                    Paper Link
                   </a>
                 </td>
                 <td className="py-3 px-4">{collab.branch}</td>
